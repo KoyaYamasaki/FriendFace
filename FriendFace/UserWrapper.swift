@@ -6,66 +6,6 @@
 //
 
 import SwiftUI
-import CoreData
-
-class UserObject: ObservableObject {
-  @Published var list: [UserWrapper] = []
-  
-  static func deleteAllObject(context: NSManagedObjectContext) {
-    
-    let request_User_CoreData = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
-    let request_Friend_CoreData = NSFetchRequest<NSFetchRequestResult>(entityName: "Friend")
-    let userDeleteRequest = NSBatchDeleteRequest(fetchRequest: request_User_CoreData)
-    let FriendDeleteRequest = NSBatchDeleteRequest(fetchRequest: request_Friend_CoreData)
-    do {
-      try context.persistentStoreCoordinator!.execute(userDeleteRequest, with: context)
-      try context.persistentStoreCoordinator!.execute(FriendDeleteRequest, with: context)
-      print("Succeeded to execute deleteRequest")
-    } catch {
-      print("Failed to execute deleteRequest")
-    }
-  }
-  
-  static func saveToCoreData(context: NSManagedObjectContext, userList: [UserWrapper]) {
-    let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-    privateMOC.parent = context
-    
-    DispatchQueue.main.async {
-      
-      for item in userList {
-        
-        let user = User(context: context)
-        user.id = item.id
-        user.name = item.name
-        user.age = Int16(item.age)
-        user.about = item.about
-        user.email = item.email
-        user.address = item.address
-        user.company = item.company
-        user.isActive = item.isActive
-        user.registered = item.registered
-
-        for friend in item.friends {
-          let friend_CoreData = Friend(context: context)
-          friend_CoreData.id = friend.id
-          friend_CoreData.name = friend.name
-          user.addToFriends(friend_CoreData)
-        }
-        
-        let tagsAsString = item.tags.description
-        let tagsAsData = tagsAsString.data(using: String.Encoding.utf16)
-        user.tags = tagsAsData
-        do {
-          try context.save()
-        } catch {
-          print(error.localizedDescription)
-        }
-      }
-    }
-    
-  }
-}
-
 
 class UserWrapper: Codable {
   enum UserCodingKeys: CodingKey {

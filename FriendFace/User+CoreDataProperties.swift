@@ -28,6 +28,10 @@ extension User {
     @NSManaged public var tags: Data?
     @NSManaged public var friends: NSSet?
 
+  var wrappedName: String {
+    name ?? "Unknown"
+  }
+
   var wrappedAbout: String {
     about ?? ""
   }

@@ -10,9 +10,9 @@ import CoreData
 
 struct ContentView: View {
   @Environment(\.managedObjectContext) var moc
-  @ObservedObject var userObject = UserObject()
-  @FetchRequest(entity: User.entity(), sortDescriptors: []) var user: FetchedResults<User>
-  @FetchRequest(entity: Friend.entity(), sortDescriptors: []) var friend: FetchedResults<Friend>
+  @ObservedObject var userObject = CoreDataHelper()
+  @FetchRequest(entity: User.entity(), sortDescriptors: []) var userList: FetchedResults<User>
+  @FetchRequest(entity: Friend.entity(), sortDescriptors: []) var friendList: FetchedResults<Friend>
   
   var body: some View {
     NavigationView {
@@ -27,8 +27,8 @@ struct ContentView: View {
         }
       }
       .onAppear(perform: {
-        if !user.isEmpty {
-          for item in user {
+        if !userList.isEmpty {
+          for item in userList {
             if let user = UserWrapper(coredata: item) {
               userObject.list.append(user)
             }
@@ -40,7 +40,8 @@ struct ContentView: View {
       .navigationTitle("Friend Face")
       .navigationBarItems(
         trailing: Button("Delete CoreData") {
-          UserObject.deleteAllObject(context: moc)
+          CoreDataHelper.deleteAllObject(context: moc, entityName: "User")
+          CoreDataHelper.deleteAllObject(context: moc, entityName: "Friend")
       })
     }
   }
@@ -57,7 +58,7 @@ struct ContentView: View {
       }
       
       if let decodedOrder = try? JSONDecoder().decode([UserWrapper].self, from: data) {
-        UserObject.saveToCoreData(context: moc, userList: decodedOrder)
+        CoreDataHelper.saveToCoreData(context: moc, userList: decodedOrder)
         DispatchQueue.main.async {
           userObject.list = decodedOrder
         }

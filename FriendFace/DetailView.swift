@@ -10,7 +10,7 @@ import Kingfisher
 
 struct DetailView: View {
   let user: UserWrapper
-  @ObservedObject var userObject: UserObject
+  @ObservedObject var userObject: CoreDataHelper
 
   var body: some View {
     ScrollView {
@@ -73,6 +73,6 @@ struct DetailView_Previews: PreviewProvider {
   static var previews: some View {
     let user = UserWrapper()
     user.name = "Test name"
-    return DetailView(user: user, userObject: UserObject())
+    return DetailView(user: user, userObject: CoreDataHelper())
   }
 }

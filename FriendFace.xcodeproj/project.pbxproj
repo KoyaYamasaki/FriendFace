@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4600D3E726A589840030DAFA /* FriendWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4600D3E626A589840030DAFA /* FriendWrapper.swift */; };
+		4600D3E926A5A8690030DAFA /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4600D3E826A5A8690030DAFA /* CoreDataHelper.swift */; };
 		4624762126A00B36002112C2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4624762026A00B36002112C2 /* AppDelegate.swift */; };
 		4624762326A00B36002112C2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4624762226A00B36002112C2 /* SceneDelegate.swift */; };
 		4624762526A00B36002112C2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4624762426A00B36002112C2 /* ContentView.swift */; };
@@ -26,6 +27,7 @@
 
 /* Begin PBXFileReference section */
 		4600D3E626A589840030DAFA /* FriendWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendWrapper.swift; sourceTree = "<group>"; };
+		4600D3E826A5A8690030DAFA /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		4624761D26A00B36002112C2 /* FriendFace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FriendFace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4624762026A00B36002112C2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4624762226A00B36002112C2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				4624763926A039C6002112C2 /* DetailView.swift */,
 				4624763726A00CFA002112C2 /* UserWrapper.swift */,
 				4600D3E626A589840030DAFA /* FriendWrapper.swift */,
+				4600D3E826A5A8690030DAFA /* CoreDataHelper.swift */,
 				4624762926A00B36002112C2 /* Assets.xcassets */,
 				4624762E26A00B36002112C2 /* LaunchScreen.storyboard */,
 				4624763126A00B36002112C2 /* Info.plist */,
@@ -183,6 +186,7 @@
 				4624763A26A039C6002112C2 /* DetailView.swift in Sources */,
 				4600D3E726A589840030DAFA /* FriendWrapper.swift in Sources */,
 				4624762326A00B36002112C2 /* SceneDelegate.swift in Sources */,
+				4600D3E926A5A8690030DAFA /* CoreDataHelper.swift in Sources */,
 				4624762826A00B36002112C2 /* FriendFace.xcdatamodeld in Sources */,
 				4624763826A00CFB002112C2 /* UserWrapper.swift in Sources */,
 				4682CE1826A2B027004BD26C /* User+CoreDataProperties.swift in Sources */,
