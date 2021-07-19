@@ -10,7 +10,7 @@ import Kingfisher
 
 struct DetailView: View {
   let user: User
-  @ObservedObject var userObject: UserObject
+  let userList: [User]
 
   var body: some View {
     ScrollView {
@@ -22,39 +22,48 @@ struct DetailView: View {
       
       
       VStack(alignment: .leading, spacing: 20) {
-        Section(header: SectionHeaderView(header: user.name)) {
+        Section(header: SectionHeaderView(header: user.wrappedName)) {
           HStack {
             Text("age: \(user.age)")
             Spacer()
             Divider()
-            Text("company: \(user.company)")
+            Text("company: \(user.wrappedCompany)")
               .padding(.trailing, 20)
           }
           .frame(height: 20)
           Divider()
-          Text("email: \(user.email)")
+          Text("email: \(user.wrappedEmail)")
           Divider()
-          Text("address: \(user.address)")
+          Text("address: \(user.wrappedAddress)")
           Divider()
-          Text("about: \(user.about)")
+          Text("about: \(user.wrappedAbout)")
           Divider()
-          Text("joined at: \(user.registered)")
+          Text("joined at: \(user.wrappedRegistered)")
         }
         
         Section(header: SectionHeaderView(header: "Friends")) {
-          ForEach(user.friends, id: \.id) { friend in
-            let user = userObject.list.first(where: {$0.id == friend.id})
+          ForEach(getFriendsArray, id: \.id) { friend in
+            let matchedUser = userList.first(where: {$0.id == friend.id})
             NavigationLink(
-              destination: DetailView(user: user!, userObject: userObject),
+              destination: DetailView(user: matchedUser!, userList: userList),
               label: {
-                Text(friend.name)
+                Text(friend.wrappedName)
               })
           }
         }
         
       }
 //      .frame(width: UIScreen.main.bounds.width)
-      .navigationTitle(user.name)
+      .navigationTitle(user.wrappedName)
+    }
+  } //: Body
+
+  var getFriendsArray: [Friend] {
+    if let friends = user.friends {
+      let friendArray: [Friend] = friends.toArray()
+      return friendArray
+    } else {
+      return []
     }
   }
 }
@@ -73,6 +82,6 @@ struct DetailView_Previews: PreviewProvider {
   static var previews: some View {
     let user = User()
     user.name = "Test name"
-    return DetailView(user: user, userObject: UserObject())
+    return DetailView(user: user, userList: [user])
   }
 }

@@ -10,16 +10,14 @@ import CoreData
 
 struct ContentView: View {
   @Environment(\.managedObjectContext) var moc
-  @ObservedObject var userObject = UserObject()
-  @FetchRequest(entity: User_CoreData.entity(), sortDescriptors: []) var user_coredata: FetchedResults<User_CoreData>
-  @FetchRequest(entity: Friend_CoreData.entity(), sortDescriptors: []) var friend_coredata: FetchedResults<Friend_CoreData>
+  @FetchRequest(entity: User.entity(), sortDescriptors: []) var userList: FetchedResults<User>
   
   var body: some View {
     NavigationView {
-      List(userObject.list, id: \.id) { user in
-        NavigationLink(destination: DetailView(user: user, userObject: userObject)) {
+      List(userList, id: \.id) { user in
+        NavigationLink(destination: DetailView(user: user, userList: Array(userList))) {
           VStack(alignment: .leading) {
-            Text(user.name)
+            Text(user.wrappedName)
             Text(user.isActive ? "🟢Online" : "🔴Offline")
               .font(.caption)
               .foregroundColor(.gray)
@@ -27,20 +25,15 @@ struct ContentView: View {
         }
       }
       .onAppear(perform: {
-        if !user_coredata.isEmpty {
-          for item in user_coredata {
-            if let user = User(coredata: item) {
-              userObject.list.append(user)
-            }
-          }
-        } else {
+        if userList.isEmpty {
           getFriendFace()
         }
       })
       .navigationTitle("Friend Face")
       .navigationBarItems(
         trailing: Button("Delete CoreData") {
-          UserObject.deleteAllObject(context: moc)
+          CoreDataHelper.deleteAllObject(context: moc, entityName: "User")
+          CoreDataHelper.deleteAllObject(context: moc, entityName: "Friend")
       })
     }
   }
@@ -56,11 +49,8 @@ struct ContentView: View {
         return
       }
       
-      if let decodedOrder = try? JSONDecoder().decode([User].self, from: data) {
-        UserObject.saveToCoreData(context: moc, userList: decodedOrder)
-        DispatchQueue.main.async {
-          userObject.list = decodedOrder
-        }
+      if let decodedOrder = try? JSONDecoder().decode([UserWrapper].self, from: data) {
+        CoreDataHelper.saveToCoreData(context: moc, userList: decodedOrder)
       } else {
         print("Invalid response from server")
       }
