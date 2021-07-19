@@ -60,3 +60,18 @@ class CoreDataHelper: ObservableObject {
     
   }
 }
+
+extension NSSet {
+  func toArray<T>() -> [T] {
+    let array = self.map({ $0 as! T})
+    return array
+  }
+}
+
+//extension Date {
+//  var dayAndMonth: String {
+//    let dateFormatter = DateFormatter()
+//    dateFormatter.dateFormat = "yyyy/MM/dd"
+//    return dateFormatter.string(from: self)
+//  }
+//}

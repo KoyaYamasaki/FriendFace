@@ -16,12 +16,7 @@ class FriendWrapper: Codable {
   var name: String = ""
   
   init() {}
-  
-  init(coredata: Friend) {
-    self.id = coredata.id!
-    self.name = coredata.name!
-  }
-  
+
   required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: FriendCodingKeys.self)
     

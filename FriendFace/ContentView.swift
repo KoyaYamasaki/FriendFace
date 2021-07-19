@@ -10,16 +10,14 @@ import CoreData
 
 struct ContentView: View {
   @Environment(\.managedObjectContext) var moc
-  @ObservedObject var userObject = CoreDataHelper()
   @FetchRequest(entity: User.entity(), sortDescriptors: []) var userList: FetchedResults<User>
-  @FetchRequest(entity: Friend.entity(), sortDescriptors: []) var friendList: FetchedResults<Friend>
   
   var body: some View {
     NavigationView {
-      List(userObject.list, id: \.id) { user in
-        NavigationLink(destination: DetailView(user: user, userObject: userObject)) {
+      List(userList, id: \.id) { user in
+        NavigationLink(destination: DetailView(user: user, userList: Array(userList))) {
           VStack(alignment: .leading) {
-            Text(user.name)
+            Text(user.wrappedName)
             Text(user.isActive ? "🟢Online" : "🔴Offline")
               .font(.caption)
               .foregroundColor(.gray)
@@ -27,13 +25,7 @@ struct ContentView: View {
         }
       }
       .onAppear(perform: {
-        if !userList.isEmpty {
-          for item in userList {
-            if let user = UserWrapper(coredata: item) {
-              userObject.list.append(user)
-            }
-          }
-        } else {
+        if userList.isEmpty {
           getFriendFace()
         }
       })
@@ -59,9 +51,6 @@ struct ContentView: View {
       
       if let decodedOrder = try? JSONDecoder().decode([UserWrapper].self, from: data) {
         CoreDataHelper.saveToCoreData(context: moc, userList: decodedOrder)
-        DispatchQueue.main.async {
-          userObject.list = decodedOrder
-        }
       } else {
         print("Invalid response from server")
       }
