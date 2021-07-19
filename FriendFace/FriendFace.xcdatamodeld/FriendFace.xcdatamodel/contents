@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20B29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Friend_CoreData" representedClassName="Friend_CoreData" syncable="YES">
+    <entity name="Friend" representedClassName="Friend" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="origin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User_CoreData" inverseName="friends" inverseEntity="User_CoreData"/>
+        <relationship name="origin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="friends" inverseEntity="User"/>
     </entity>
-    <entity name="User_CoreData" representedClassName="User_CoreData" syncable="YES">
+    <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="about" optional="YES" attributeType="String"/>
         <attribute name="address" optional="YES" attributeType="String"/>
         <attribute name="age" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -16,7 +16,7 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="registered" optional="YES" attributeType="String"/>
         <attribute name="tags" optional="YES" attributeType="Binary"/>
-        <relationship name="friends" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Friend_CoreData" inverseName="origin" inverseEntity="Friend_CoreData"/>
+        <relationship name="friends" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Friend" inverseName="origin" inverseEntity="Friend"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -24,7 +24,7 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="Friend_CoreData" positionX="67.91796875" positionY="253.73046875" width="128" height="74"/>
-        <element name="User_CoreData" positionX="-370.83203125" positionY="-80.21875" width="128" height="194"/>
+        <element name="Friend" positionX="67.91796875" positionY="253.73046875" width="128" height="74"/>
+        <element name="User" positionX="-370.83203125" positionY="-80.21875" width="128" height="194"/>
     </elements>
 </model>

@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct DetailView: View {
-  let user: User
+  let user: UserWrapper
   @ObservedObject var userObject: UserObject
 
   var body: some View {
@@ -71,7 +71,7 @@ struct SectionHeaderView: View {
 
 struct DetailView_Previews: PreviewProvider {
   static var previews: some View {
-    let user = User()
+    let user = UserWrapper()
     user.name = "Test name"
     return DetailView(user: user, userObject: UserObject())
   }

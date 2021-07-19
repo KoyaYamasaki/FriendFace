@@ -11,8 +11,8 @@ import CoreData
 struct ContentView: View {
   @Environment(\.managedObjectContext) var moc
   @ObservedObject var userObject = UserObject()
-  @FetchRequest(entity: User_CoreData.entity(), sortDescriptors: []) var user_coredata: FetchedResults<User_CoreData>
-  @FetchRequest(entity: Friend_CoreData.entity(), sortDescriptors: []) var friend_coredata: FetchedResults<Friend_CoreData>
+  @FetchRequest(entity: User.entity(), sortDescriptors: []) var user: FetchedResults<User>
+  @FetchRequest(entity: Friend.entity(), sortDescriptors: []) var friend: FetchedResults<Friend>
   
   var body: some View {
     NavigationView {
@@ -27,9 +27,9 @@ struct ContentView: View {
         }
       }
       .onAppear(perform: {
-        if !user_coredata.isEmpty {
-          for item in user_coredata {
-            if let user = User(coredata: item) {
+        if !user.isEmpty {
+          for item in user {
+            if let user = UserWrapper(coredata: item) {
               userObject.list.append(user)
             }
           }
@@ -56,7 +56,7 @@ struct ContentView: View {
         return
       }
       
-      if let decodedOrder = try? JSONDecoder().decode([User].self, from: data) {
+      if let decodedOrder = try? JSONDecoder().decode([UserWrapper].self, from: data) {
         UserObject.saveToCoreData(context: moc, userList: decodedOrder)
         DispatchQueue.main.async {
           userObject.list = decodedOrder

@@ -1,5 +1,5 @@
 //
-//  User_CoreData+CoreDataProperties.swift
+//  User+CoreDataProperties.swift
 //  FriendFace
 //
 //  Created by 山崎宏哉 on 2021/07/17.
@@ -10,10 +10,10 @@ import Foundation
 import CoreData
 
 
-extension User_CoreData {
+extension User {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<User_CoreData> {
-        return NSFetchRequest<User_CoreData>(entityName: "User_CoreData")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<User> {
+        return NSFetchRequest<User>(entityName: "User")
     }
 
     @NSManaged public var about: String?
@@ -50,13 +50,13 @@ extension User_CoreData {
 }
 
 // MARK: Generated accessors for friends
-extension User_CoreData {
+extension User {
 
     @objc(addFriendsObject:)
-    @NSManaged public func addToFriends(_ value: Friend_CoreData)
+    @NSManaged public func addToFriends(_ value: Friend)
 
     @objc(removeFriendsObject:)
-    @NSManaged public func removeFromFriends(_ value: Friend_CoreData)
+    @NSManaged public func removeFromFriends(_ value: Friend)
 
     @objc(addFriends:)
     @NSManaged public func addToFriends(_ values: NSSet)
@@ -66,6 +66,6 @@ extension User_CoreData {
 
 }
 
-extension User_CoreData : Identifiable {
+extension User : Identifiable {
 
 }

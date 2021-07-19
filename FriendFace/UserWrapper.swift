@@ -9,12 +9,12 @@ import SwiftUI
 import CoreData
 
 class UserObject: ObservableObject {
-  @Published var list: [User] = []
+  @Published var list: [UserWrapper] = []
   
   static func deleteAllObject(context: NSManagedObjectContext) {
     
-    let request_User_CoreData = NSFetchRequest<NSFetchRequestResult>(entityName: "User_CoreData")
-    let request_Friend_CoreData = NSFetchRequest<NSFetchRequestResult>(entityName: "Friend_CoreData")
+    let request_User_CoreData = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
+    let request_Friend_CoreData = NSFetchRequest<NSFetchRequestResult>(entityName: "Friend")
     let userDeleteRequest = NSBatchDeleteRequest(fetchRequest: request_User_CoreData)
     let FriendDeleteRequest = NSBatchDeleteRequest(fetchRequest: request_Friend_CoreData)
     do {
@@ -26,7 +26,7 @@ class UserObject: ObservableObject {
     }
   }
   
-  static func saveToCoreData(context: NSManagedObjectContext, userList: [User]) {
+  static func saveToCoreData(context: NSManagedObjectContext, userList: [UserWrapper]) {
     let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
     privateMOC.parent = context
     
@@ -34,7 +34,7 @@ class UserObject: ObservableObject {
       
       for item in userList {
         
-        let user = User_CoreData(context: context)
+        let user = User(context: context)
         user.id = item.id
         user.name = item.name
         user.age = Int16(item.age)
@@ -44,20 +44,13 @@ class UserObject: ObservableObject {
         user.company = item.company
         user.isActive = item.isActive
         user.registered = item.registered
-        
-        //    let friend = Friend_CoreData(context: self.moc)
-        //    friend.id = item.id
-        //    friend.name = item.name
-        
-        
+
         for friend in item.friends {
-          let friend_CoreData = Friend_CoreData(context: context)
+          let friend_CoreData = Friend(context: context)
           friend_CoreData.id = friend.id
           friend_CoreData.name = friend.name
           user.addToFriends(friend_CoreData)
         }
-        
-        //      user.friends = NSSet(array: friends)
         
         let tagsAsString = item.tags.description
         let tagsAsData = tagsAsString.data(using: String.Encoding.utf16)
@@ -74,7 +67,7 @@ class UserObject: ObservableObject {
 }
 
 
-class User: Codable {
+class UserWrapper: Codable {
   enum UserCodingKeys: CodingKey {
     case id, isActive, name, age, company, email, address, about, registered, tags, friends
   }
@@ -89,11 +82,11 @@ class User: Codable {
   var about: String = ""
   var registered: String = ""
   var tags: [String] = []
-  var friends: [Friend] = []
+  var friends: [FriendWrapper] = []
   
   init() {}
   
-  init?(coredata: User_CoreData) {
+  init?(coredata: User) {
     guard coredata.id != nil else {
       return nil
     }
@@ -108,7 +101,7 @@ class User: Codable {
     about = coredata.wrappedAbout
     registered = coredata.wrappedRegistered
       for friend in coredata.friends! {
-        friends.append(Friend(coredata: friend as! Friend_CoreData))
+        friends.append(FriendWrapper(coredata: friend as! Friend))
       }
     
   }
@@ -126,7 +119,7 @@ class User: Codable {
     about = try container.decode(String.self, forKey: .about)
     registered = try container.decode(String.self, forKey: .registered)
     tags = try container.decode([String].self, forKey: .tags)
-    friends = try container.decode([Friend].self, forKey: .friends)
+    friends = try container.decode([FriendWrapper].self, forKey: .friends)
   }
   
   func encode(to encoder: Encoder) throws {
@@ -143,36 +136,6 @@ class User: Codable {
     try container.encode(registered, forKey: .registered)
     try container.encode(tags, forKey: .tags)
     try container.encode(friends, forKey: .friends)
-  }
-}
-
-class Friend: Codable {
-  enum FriendCodingKeys: CodingKey {
-    case id, name
-  }
-  
-  var id: String = ""
-  var name: String = ""
-  
-  init() {}
-  
-  init(coredata: Friend_CoreData) {
-    self.id = coredata.id!
-    self.name = coredata.name!
-  }
-  
-  required init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: FriendCodingKeys.self)
-    
-    id = try container.decode(String.self, forKey: .id)
-    name = try container.decode(String.self, forKey: .name)
-  }
-  
-  func encode(to encoder: Encoder) throws {
-    var container = encoder.container(keyedBy: FriendCodingKeys.self)
-    
-    try container.encode(id, forKey: .id)
-    try container.encode(name, forKey: .name)
   }
 }
 
